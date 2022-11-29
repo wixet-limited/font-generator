@@ -21,7 +21,7 @@ docker run -v `pwd`:/src -e FONT_NAME=lolo -e NEGATE=true wixet/font-icon-genera
 If you are using non svg files, an intermediate process of converting your file into svg is done. If for some reason you want to keep them, just mount the `/svg` directory:
 
 ```
-docker run -v `pwd`:/src -v `pwd`/svg:/svg -e FONT_NAME=lolo -e NEGATE=true wixet/font-icon-generator
+docker run -v `pwd`:/src -v `pwd`/svg:/svg -e FONT_NAME=lolo wixet/font-icon-generator
 ```
 With this command, the converted SVG files will be stored in your host machine
 
