@@ -28,12 +28,12 @@ With this command, the converted SVG files will be stored in your host machine
 
 # What to do with the generated files
 
-The fonts and the css file is generated. You have to cofigure the `css` file depending on the location in your webpage.
-Where the fonts are loaded, for example the line `url('/assets/fonts/lolo.eot');` you should replace `/assets/fonts/lolo.eot` by the real location. In my
+The generated files are the fonts and the css to embed into your web page. You have to adapt the `css` file depending on the location in your webpage.
+Basically you have to edit where the fonts are loaded. For example the line `url('/assets/fonts/lolo.eot');` you should replace `/assets/fonts/lolo.eot` by the real location in your web server. In my
 case I use `angular` and this is the default path for me. What you put there is what the browser will try to downoad so a fast and easy way to test it is
 just pasting it into the browser and check that the font is being downloaded.
 
-The next step is to include the `css` (or its content) into your webpage and in your use it in your `html` code. For example
+The next step is to include the `css` (or paste the content into your main css file) into your webpage and in your use it in your `html` code. For example
 ```
 <i class="icon-back"></i>
 ```
