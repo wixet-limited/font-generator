@@ -89,6 +89,8 @@ display: inline-block;
  line-height: 1;
  -webkit-font-smoothing: antialiased;
  -moz-osx-font-smoothing: grayscale
+ text-align: center;
+ width: 1em;
 }}
 """
 
