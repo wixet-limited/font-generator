@@ -18,6 +18,7 @@ accepted_extensions = ["png", "jpeg", "jpg"]
 
 # create an empty font with the provided name
 font = fontforge.font()
+font.encoding = "UnicodeBMP"
 font.familyname = FONT_NAME
 font.fullname = FONT_NAME
 font.fontname = FONT_NAME
@@ -29,32 +30,34 @@ css_index = UNI_START
 # Add the glyph to the font from an svg
 def add_glyph(svg_file_path, uni_index):
     filename = svg_file_path.split("/")[-1].lower()
+    name = filename.split(".")[0]
     print("Adding", filename)
-    glyph = font.createChar(uni_index)
+    glyph = font.createChar(uni_index, name)
     glyph.importOutlines(svg_file_path)
-    return ".icon-{name}:before{{content:'\{uni_val}';}}".format(name=filename.split(".")[0], uni_val=hex(uni_index)[2:])
+    return ".icon-{name}:before{{content:'\{uni_val}';}}".format(name=name, uni_val=hex(uni_index)[2:])
 
 # Scan for any image
 for i in os.listdir(SRC_DIR):
-    name, extension = i.split(".", 1)
-    if extension.lower() in accepted_extensions:
-        svg_path = os.path.join(SVG_DIR,name + ".svg")
-        bitmap_path = "/tmp/" + name + ".ppm"
-        print("Procesing", i);
-        params = [os.path.join(SRC_DIR, i), '-alpha', 'remove', bitmap_path]
-        if NEGATE:
-            params = ['-negate'] + params
-        
-        subprocess.call(['convert'] + params)
-        subprocess.call(['potrace', '--svg', '-o', svg_path, bitmap_path])
-        css_icons.append(add_glyph(svg_path, css_index))
-        css_index += 1
-        
-    elif i.lower().endswith(".svg"):
-        css_icons.append(add_glyph(os.path.join(SRC_DIR, i), css_index))
-        css_index += 1
-    else:
-        print("Ignoring", name)
+    if "." in i:
+        name, extension = i.split(".", 1)
+        if extension.lower() in accepted_extensions:
+            svg_path = os.path.join(SVG_DIR,name + ".svg")
+            bitmap_path = "/tmp/" + name + ".ppm"
+            print("Procesing", i);
+            params = [os.path.join(SRC_DIR, i), '-alpha', 'remove', bitmap_path]
+            if NEGATE:
+                params = ['-negate'] + params
+            
+            subprocess.call(['convert'] + params)
+            subprocess.call(['potrace', '--svg', '-o', svg_path, bitmap_path])
+            css_icons.append(add_glyph(svg_path, css_index))
+            css_index += 1
+            
+        elif i.lower().endswith(".svg"):
+            css_icons.append(add_glyph(os.path.join(SRC_DIR, i), css_index))
+            css_index += 1
+        else:
+            print("Ignoring", name)
         
     
 
@@ -88,7 +91,7 @@ display: inline-block;
  font-weight: normal;
  line-height: 1;
  -webkit-font-smoothing: antialiased;
- -moz-osx-font-smoothing: grayscale
+ -moz-osx-font-smoothing: grayscale;
  text-align: center;
  width: 1em;
 }}
